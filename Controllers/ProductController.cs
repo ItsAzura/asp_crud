@@ -78,5 +78,36 @@ namespace learn_crud.Controllers
             //Chuyển hướng sau khi thêm thành công
             return RedirectToAction("Index", "Product");
         }
+
+        //Action trả về view để chỉnh sửa sản phẩm
+        [HttpGet] //Action này chỉ xử lý request get
+        public IActionResult Edit(int id)
+        {
+            //Tìm sản phẩm theo id
+            var product = context.Products.Find(id);
+
+            //Kiểm tra sản phẩm có tồn tại không
+            if(product == null)
+            {
+                return RedirectToAction("Index", "Products");
+            }
+
+            //Chuyển đổi Product thành ProductDto
+            var productDto = new ProductDto()
+            {
+                Name = product.Name,
+                Brand = product.Brand,
+                Category = product.Category,
+                Price = product.Price,
+                Description = product.Description
+            };
+
+            //Truyền dữ liệu sản phẩm vào view để hiển thị
+            ViewData["ProductId"] = product.Id;
+            ViewData["ImageFileName"] = product.ImageFileName;
+            ViewData["CreateDate"] = product.CreateDate;
+
+            return View(productDto);
+        }
     }
 }

@@ -245,6 +245,10 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
+      "Id": "D:\\Learn C#\\learn_crud\\learn_crud\\wwwroot\\products\\20250219133214.jpg",
+      "PackagePath": "staticwebassets\\products\\20250219133214.jpg"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.learn_crud.props",
       "PackagePath": "build\\learn_crud.props"
     },

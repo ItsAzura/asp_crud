@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "ZiLa7GpauwCtSKxsmF79BTbNIql3M9f9Ott3z4kYd/k=",
+  "Hash": "6uQhcHKiFP0hyes29X9/EtS7gKcAhOgtgsD+jG5Pe9M=",
   "Source": "learn_crud",
   "BasePath": "_content/learn_crud",
   "Mode": "Default",
@@ -1193,6 +1193,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Identity": "D:\\Learn C#\\learn_crud\\learn_crud\\wwwroot\\products\\20250219133214.jpg",
+      "SourceId": "learn_crud",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Learn C#\\learn_crud\\learn_crud\\wwwroot\\",
+      "BasePath": "_content/learn_crud",
+      "RelativePath": "products/20250219133214.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\products\\20250219133214.jpg"
     }
   ]
 }
