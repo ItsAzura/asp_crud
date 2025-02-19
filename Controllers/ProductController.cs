@@ -109,5 +109,61 @@ namespace learn_crud.Controllers
 
             return View(productDto);
         }
+
+        //Action xử lý request post khi người dùng chỉnh sửa sản phẩm
+        [HttpPost] //Action này chỉ xử lý request post
+        public IActionResult Edit(int id, ProductDto productDto)
+        {
+            //Tìm sản phẩm theo id
+            var product = context.Products.Find(id);
+
+            //Kiểm tra sản phẩm có tồn tại không
+            if(product == null)
+            {
+                return RedirectToAction("Index", "Products");
+            }
+
+            //Kiểm tra dữ liệu nhập vào có hợp lệ không?
+            if(!ModelState.IsValid)
+            {
+                ViewData["ProductId"] = product.Id;
+                ViewData["ImageFileName"] = product.ImageFileName;
+                ViewData["CreateDate"] = product.CreateDate;
+                return View(productDto);
+            }
+
+            //Xử lý ảnh mới
+            string NewFileName = product.ImageFileName;
+            //Nếu user tải ảnh mới lên
+            if(productDto.ImageFile != null)
+            {
+                //Tạo file name mới
+                NewFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetExtension(productDto.ImageFile.FileName);
+                string imagePath = environment.WebRootPath + "/products/" + NewFileName;
+                using(var stream = System.IO.File.Create(imagePath))
+                {
+                    productDto.ImageFile.CopyTo(stream);
+                }
+
+                //Xóa ảnh cũ
+                string oldImagePath = environment.WebRootPath + "/products/" + product.ImageFileName;
+                if(System.IO.File.Exists(oldImagePath))
+                {
+                    System.IO.File.Delete(oldImagePath);
+                }
+            }   
+
+            //Cập nhật thông tin sản phẩm
+            product.Name = productDto.Name;
+            product.Brand = productDto.Brand;
+            product.Category = productDto.Category;
+            product.Price = productDto.Price;
+            product.Description = productDto.Description;
+            product.ImageFileName = NewFileName;
+
+            //Lưu thay đổi vào database
+            context.SaveChanges();
+            return RedirectToAction("Index", "Product");
+        }
     }
 }
