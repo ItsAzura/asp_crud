@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace learn_crud.Models
 {
+    //Model class để tạo bảng Product trong database
     public class Product
     {
         public int Id { get; set; }
