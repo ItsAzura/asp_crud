@@ -10,7 +10,7 @@ namespace learn_crud.Controllers
         private readonly IWebHostEnvironment environment; //Để xác định nơi lưu trữ file
         public ProductController(ApplicationDbContext context, IWebHostEnvironment environment)
         {
-            this.context = context; 
+            this.context = context;
             this.environment = environment;
         }
 
@@ -18,13 +18,13 @@ namespace learn_crud.Controllers
         public IActionResult Index()
         {
             //Lấy danh sách sản phẩm từ database và sắp xếp theo Id giảm dần
-            var products = context.Products.OrderByDescending(p => p.Id ).ToList();
+            var products = context.Products.OrderByDescending(p => p.Id).ToList();
 
             //Trả về view và truyền danh sách sản phẩm vào view
             return View(products);
         }
 
-         //Action trả về view để tạo mới sản phẩm
+        //Action trả về view để tạo mới sản phẩm
         public IActionResult Create()
         {
             return View();
@@ -35,7 +35,7 @@ namespace learn_crud.Controllers
         public IActionResult Create(ProductDto productDto)
         {
             //Kiểm tra user có tải ảnh lên không?
-            if(productDto.ImageFile == null)
+            if (productDto.ImageFile == null)
             {
                 ModelState.AddModelError("ImageFile", "The image is required");
             }
@@ -53,7 +53,7 @@ namespace learn_crud.Controllers
             string imagePath = environment.WebRootPath + "/products/" + newFileName;
 
             //Lưu file vào đường dẫn vừa tạo
-            using(var stream = System.IO.File.Create(imagePath))
+            using (var stream = System.IO.File.Create(imagePath))
             {
                 productDto.ImageFile.CopyTo(stream);
             }
@@ -87,7 +87,7 @@ namespace learn_crud.Controllers
             var product = context.Products.Find(id);
 
             //Kiểm tra sản phẩm có tồn tại không
-            if(product == null)
+            if (product == null)
             {
                 return RedirectToAction("Index", "Products");
             }
@@ -118,13 +118,13 @@ namespace learn_crud.Controllers
             var product = context.Products.Find(id);
 
             //Kiểm tra sản phẩm có tồn tại không
-            if(product == null)
+            if (product == null)
             {
                 return RedirectToAction("Index", "Products");
             }
 
             //Kiểm tra dữ liệu nhập vào có hợp lệ không?
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 ViewData["ProductId"] = product.Id;
                 ViewData["ImageFileName"] = product.ImageFileName;
@@ -135,23 +135,23 @@ namespace learn_crud.Controllers
             //Xử lý ảnh mới
             string NewFileName = product.ImageFileName;
             //Nếu user tải ảnh mới lên
-            if(productDto.ImageFile != null)
+            if (productDto.ImageFile != null)
             {
                 //Tạo file name mới
                 NewFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetExtension(productDto.ImageFile.FileName);
                 string imagePath = environment.WebRootPath + "/products/" + NewFileName;
-                using(var stream = System.IO.File.Create(imagePath))
+                using (var stream = System.IO.File.Create(imagePath))
                 {
                     productDto.ImageFile.CopyTo(stream);
                 }
 
                 //Xóa ảnh cũ
                 string oldImagePath = environment.WebRootPath + "/products/" + product.ImageFileName;
-                if(System.IO.File.Exists(oldImagePath))
+                if (System.IO.File.Exists(oldImagePath))
                 {
                     System.IO.File.Delete(oldImagePath);
                 }
-            }   
+            }
 
             //Cập nhật thông tin sản phẩm
             product.Name = productDto.Name;
@@ -162,6 +162,29 @@ namespace learn_crud.Controllers
             product.ImageFileName = NewFileName;
 
             //Lưu thay đổi vào database
+            context.SaveChanges();
+            return RedirectToAction("Index", "Product");
+        }
+
+        //Xóa sản phẩm
+        public IActionResult Delete(int id)
+        {
+            var product = context.Products.Find(id);
+
+            if (product == null)
+            {
+                return RedirectToAction("Index", "Products");
+            }
+
+            //Xóa ảnh
+            string imagePath = environment.WebRootPath + "/products/" + product.ImageFileName;
+            if (System.IO.File.Exists(imagePath))
+            {
+                System.IO.File.Delete(imagePath);
+            }
+
+            //Xóa sản phẩm
+            context.Products.Remove(product);
             context.SaveChanges();
             return RedirectToAction("Index", "Product");
         }
